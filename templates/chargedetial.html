@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load  bootstrap3 %}
+{% load  static %}
+{% block header-css %}
+    <style type="text/css">
+
+        div#rMenu {
+            position: absolute;
+            visibility: hidden;
+            text-align: left;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            float: left;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            list-style: none;
+            background-clip: padding-box;
+        }
+
+        div#rMenu li {
+            margin: 1px 0;
+            cursor: pointer;
+        }
+
+        .dropdown a:hover {
+            background-color: #f1f1f1
+        }
+    </style>
+
+{% endblock %}
+
+{% block  title %}收费详情{% endblock %}
+
+{% block page-content %}
+    <div class="row wrapper border-bottom white-bg page-heading ">
+        <div class="col-lg-10">
+            <h2>收费详情</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url "index" %}">主页</a>
+                </li>
+                <li>
+                    <a href="{% url 'index' %}" >收费管理</a>
+                </li>
+                <li>
+                    <strong>收费详情</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2" id="split-left">
+        </div>
+    </div>
+            <div class="col-lg-12" id="split-right">
+
+                <div class="ibox float-e-margins">
+
+                    <div class="ibox-title">
+                        <h5>收费信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项 1</a>
+                                </li>
+                                <li><a href="#">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <h2 style="color: red">{{ err_msg }}</h2>
+                        <div class="table-responsive">
+
+                        <!--startprint section-->
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                            <h2 style="text-align:center;display: inline" id="d-printer-header"></h2>
+                                    <br/><br/>
+                                <table class="table table-striped table-bordered table-hover dataTables-asset">
+                                    <thead>
+                                    <tr>
+                                        <th>抄表册</th>
+                                        <th>户号</th>
+                                        <th>户名</th>
+                                        <th>欠费时间</th>
+                                        <th>电话</th>
+                                        <th>是否已收费</th>
+                                        <th>收费人</th>
+                                        <th>收费金额</th>
+                                        <th>收费时间</th>
+                                    </tr>
+                                    </thead>
+                                    {% for   row   in   query_list %}
+                                        <tr class="gradeA" id="{{ row.id }}">
+                                            <td class="center">{{ row.write_book}}</td>
+                                            <td class="center">{{ row.account_number }}</td>
+                                            <td class="center">{{ row.account_name }}</td>
+                                            <td class="center">{{ row.arrears_time|date:"Y-m-d H:i:s" }}</td>
+                                            <td class="center">{{ row.user_phone }}</td>
+                                            <td class="center">{{ row.in_arrears}}</td>
+                                        <td class="center">{{ row.cashier}}</td>
+                                        <td class="center">{{ row.charges}}</td>
+                                        <td class="center">{{ row.charge_time|date:"Y-m-d H:i:s"}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                                    <h3 style="display: inline" id="d-printer-message"></h3>
+                                    &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&ensp;
+                                    <h3 style="display: inline; text-align: right" id="d-printer-sign"></h3>
+                               <!--endprint section-->
+                            <br/>
+                            <button class="btn btn-sm btn-primary" type="button" onclick="doPrint(1)">打印</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    {% block footer-js %}
+
+        <script type="text/javascript">
+
+        $('#d-printer-header').text('收取历史欠费凭证(内部结算使用)');
+        $('#d-printer-message').text('提示客户:请执此凭证及时到1号窗口换取正式发票,联系电话:6066256转560');
+        $('#d-printer-sign').text('收款章:');
+
+        </script>
+    {% endblock %}
+
+    {% block footer-js-ajax %}
+    {% endblock %}
+
+{% endblock %}

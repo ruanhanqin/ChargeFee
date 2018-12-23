@@ -1,0 +1,103 @@
+{% load  static %}
+
+<script src="{% static  "js/jquery-3.1.1.min.js"%}"></script>
+<script src="{% static  "js/bootstrap.min.js"%}"></script>
+<script src="{% static  "js/plugins/metisMenu/jquery.metisMenu.js"%}"></script>
+<script src="{% static  "js/plugins/slimscroll/jquery.slimscroll.min.js"%}"></script>
+<script src="{% static  "js/jQuery.print.js"%}"></script>
+
+<!-- Custom and plugin javascript -->
+<script src="{% static  "js/inspinia.js"%} "></script>
+<script src="{% static  "js/plugins/pace/pace.min.js"%}"></script>
+
+<script src="{% static  "js/datatables.min.js" %}"></script>
+
+<script src="{% static  "js/plugins/select2/select2.full.min.js" %}"></script>
+
+<!-- Sweet alert -->
+<script src="{% static  "js/plugins/sweetalert/sweetalert.min.js" %}"></script>
+
+ <!-- Toastr script -->
+<script src="{% static  "js/plugins/toastr/toastr.min.js"%}"></script>
+
+<!--datetime_picker-->
+<script src="https://cdn.bootcss.com/moment.js/2.18.1/moment-with-locales.min.js"></script>
+<link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" href="{% static "css/normalize.min.css" %}">
+
+<script type='text/javascript'>
+
+    jQuery(function ($) {
+        'use strict';
+        $("#ele4").find('button').on('click', function () {
+            //Print ele4 with custom options
+            $("#ele4").print({
+                //Use Global styles
+                globalStyles: true,
+                //Add link with attrbute media=print
+                mediaPrint: false,
+                //Custom stylesheet
+                stylesheet: "{% static "css/print.css" %}",
+                //Print in a hidden iframe
+                iframe: false,
+                //Don't print this
+                noPrintSelector: ".avoid-this",
+                //Add this at top
+                prepend: null,
+                //Add this on bottom
+                append: null,
+                title: null,
+                //Log to console when printing is done via a deffered callback
+                deferred: $.Deferred().done(function () {
+                    console.log('Printing done', arguments);
+                })
+            });
+        });
+        // Fork https://github.com/sathvikp/jQuery.print for the full list of options
+    });
+    //]]>
+</script>
+<!-- Page-Level Scripts -->
+<script>
+   $("#CheckedAll").click(function () {
+        if ($(this).is(":checked")) {
+            $("[name=id]:checkbox").prop("checked", true);
+        } else {
+            $("[name=id]:checkbox").prop("checked", false);
+        }
+    });
+
+   $(function () {
+                var picker1 = $('#datetimepicker1').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    locale: moment.locale('zh-cn'),
+                    //minDate: '2016-7-1'
+                });
+                var picker2 = $('#datetimepicker2').datetimepicker({
+                    format: 'YYYY-MM-DD',
+                    locale: moment.locale('zh-cn')
+                });
+                //动态设置最小值
+                picker1.on('dp.change', function (e) {
+                    picker2.data('DateTimePicker').minDate(e.date);
+                });
+                //动态设置最大值
+                picker2.on('dp.change', function (e) {
+                    picker1.data('DateTimePicker').maxDate(e.date);
+                });
+            });
+
+   function doPrint(i) {
+        var oper = "section";
+        bdhtml=window.document.body.innerHTML;//获取当前页的html代码
+        sprnstr="<!--startprint "+oper+"-->";//设置打印开始区域
+        eprnstr="<!--endprint "+oper+"-->";//设置打印结束区域
+        prnhtml=bdhtml.substring(bdhtml.indexOf(sprnstr)+25); //从开始代码向后取html
+
+        prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));//从结束代码向前取html
+        window.document.body.innerHTML=prnhtml;
+        window.print();
+        window.document.body.innerHTML=bdhtml;
+  }
+</script>

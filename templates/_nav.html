@@ -1,0 +1,37 @@
+<nav class="navbar-default navbar-static-side  " role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong
+                                    class="font-bold">{{ user }}</strong>
+                             </span> <span class="text-muted text-xs block">
+                                {% ifequal  user.is_superuser  1 %}
+                                    管理员 {% else %} 普通用户 {% endifequal %}
+                                <b class="caret"></b></span> </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="{% url  "index" %}">修改密码</a></li>
+                        <li><a href="/logout.html">登出</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    Charge
+                </div>
+            </li>
+            <li>
+                <a href="{% url "index" %}"><i class="fa fa-dashboard"></i> <span class="nav-label">主页</span></a>
+            </li>
+            <li class={{ charge_active }}>
+                <a href="#"><i class="fa fa-inbox"></i> <span class="nav-label">收费管理</span>
+                    <span class="fa arrow"> </span></a>
+                <ul class="nav nav-second-level">
+                    <li class={{ charge_list_active }}><a href="{% url 'charge' %}">收费</a></li>
+                    <li class={{ query_active }}><a href="{% url 'query' %}">收费查询</a></li>
+                      <li class={{ summary_list_active }}><a href="{% url 'summary' %}">欠费汇总</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

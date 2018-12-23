@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load  bootstrap3 %}
+{% load  static %}
+{% block header-css %}
+
+    <style type="text/css">
+
+        div#rMenu {
+            position: absolute;
+            visibility: hidden;
+            text-align: left;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            float: left;
+            padding: 5px 0;
+            margin: 2px 0 0;
+            list-style: none;
+            background-clip: padding-box;
+        }
+
+        div#rMenu li {
+            margin: 1px 0;
+            cursor: pointer;
+        }
+
+        .dropdown a:hover {
+            background-color: #f1f1f1
+        }
+    </style>
+
+{% endblock %}
+
+{% block  title %}收费{% endblock %}
+
+{% block page-content %}
+    <div class="row wrapper border-bottom white-bg page-heading ">
+        <div class="col-lg-10">
+            <h2>收费</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url "index" %}">主页</a>
+                </li>
+                <li>
+                    <a href="{% url 'index' %}" >收费管理</a>
+                </li>
+                <li>
+                    <strong>收费</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-lg-2" id="split-left">
+        </div>
+    </div>
+            <div class="col-lg-12" id="split-right">
+
+                <div class="ibox float-e-margins">
+
+                    <div class="ibox-title">
+                        <h5>收费信息</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li><a href="#">选项 1</a>
+                                </li>
+                                <li><a href="#">选项 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        <div class="table-responsive">
+
+                            <form id="cha" class="form-horizontal" action="{% url 'charge' %}" method="GET">
+                                {% csrf_token %}
+                                <div style="margin-bottom: 10px" class="col-md-2"><input type="text" class="form-control" name="name" placeholder="输入收费户号/地址" required></div>
+                                <button style="height: 35px" class="btn btn-sm btn-primary" type="submit">查询</button>
+                            </form>
+                            <form target="_blank" class="form-horizontal" action="{% url 'charges' %}" method="POST">
+                                {% csrf_token %}
+                                <table class="table table-striped table-bordered table-hover dataTables-asset">
+                                    <thead>
+                                    <tr>
+                                        <th width="20"><input type="checkbox" id="CheckedAll"></th>
+                                        <th>序号</th>
+                                        <th>户号</th>
+                                        <th>户名</th>
+                                        <th>欠费月份</th>
+                                        <th>欠费金额</th>
+                                        <th>欠费时间</th>
+                                    </tr>
+                                    </thead>
+                                    {% if request.user.is_check_arrears %}
+                                    {% for   row   in   charge_list %}
+                                        <tr class="gradeA" id="{{ row.id }}">
+                                            <td><input type="checkbox" value="{{ row.id }}" name="id"></td>
+                                            <td class="center">{{ forloop.counter}}</td>
+                                            <td class="center">{{ row.account_number }}</td>
+                                            <td class="center">{{ row.account_name }}</td>
+                                            <td class="center">{{ row.arrears_time|date:"Y-m" }}</td>
+                                            <td class="center">{{ row.arrears }}</td>
+                                            <td class="center">{{ row.arrears_time|date:"Y-m-d H:i:s" }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    {% endif %}
+                                </table>
+                               {% if request.user.is_charge and request.user.is_check_arrears %}
+                                <div class="col-md-2"><input type="text" class="form-control" name="money"  placeholder="输入收费金额" required></div>
+                                <button style="height: 35px" class="btn btn-sm btn-primary" type="submit">确认收费</button>
+                               {% endif %}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+    {% block footer-js %}
+
+        <script type="text/javascript">
+
+        </script>
+    {% endblock %}
+
+    {% block footer-js-ajax %}
+    {% endblock %}
+
+{% endblock %}
